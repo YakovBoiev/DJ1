@@ -1,9 +1,10 @@
+{% load static %}
 <div class="header clearfix">
-    <a href="/" class="logo"></a>
+    <a href="{% url 'index' %}" class="logo"></a>
     <ul class="menu">
-        <li><a href="/" class="active">домой</a></li>
-        <li><a href="/products/">продукты</a></li>
-        <li><a href="/contacts/">контакты</a></li>
+        <li><a href="{% url 'index' %}" class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">домой</a></li>
+        <li><a href="{% url 'products:products_all' %}" class="{% if request.resolver_match.url_name == 'products_all' %}active{% endif %}" >продукты</a></li>
+        <li><a href="{% url 'contacts' %}" class="{% if request.resolver_match.url_name == 'contacts' %}active{% endif %}">контакты</a></li>
     </ul>
     <a href="#" class="search"></a>
 </div>
