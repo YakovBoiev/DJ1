@@ -13,6 +13,10 @@ class ProductCategory(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'категория'
+        verbose_name_plural = 'категории'
+
 
 class Product(models.Model):
     category = models.ForeignKey(
@@ -41,4 +45,8 @@ class Product(models.Model):
         default=0)
 
     def __str__(self):
-        return f"{self.name} ({self.category.name})"
+        return f"{self.name} {self.pk}"
+
+    class Meta:
+        verbose_name = 'товар'
+        verbose_name_plural = 'товары'
