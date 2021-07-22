@@ -1066,7 +1066,9 @@ td:first-child {
 .related-products a .text img {
 	float: none;
 	margin-top: 80px;
+
 }
 .related-products a:hover .text{
 	display: block;
 }
+
