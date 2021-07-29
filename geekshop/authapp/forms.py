@@ -40,6 +40,7 @@ class ShopUserEditForm(UserChangeForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
 
+
     def clean_age(self):
         data = self.cleaned_data['age']
         if data < 18:

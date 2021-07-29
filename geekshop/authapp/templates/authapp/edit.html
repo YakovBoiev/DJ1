@@ -3,12 +3,19 @@
 
 
 {% block content %}
-    <div class="row col-3">
-    <form class="form-horizontal" action="{% url 'auth:edit' %}" method="post">
+<div class="col-4 mx-auto">
+        <div class="row">
+            <div class="user_avatar">
+                <img src="/media/{{ user.avatar }}" class="rounded-circle">
+            </div>
+        </div>
+
+    <div class="row col-8">
+    <form class="form-horizontal" action="{% url 'auth:edit' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ edit_form.as_p }}
         <br>
-        <input class="form-control btn-primary" type="submit" value="сохранить">
+        <input class="form-control btn-primary" type="submit" value="Cохранить">
     </form>
     </div>
 {% endblock %}
