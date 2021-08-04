@@ -55,3 +55,20 @@ def index(request, pk=None):
         'basket': basket,
     }
     return render(request, 'mainapp/products.html', context)
+
+
+def product(request, pk):
+    title = 'Продукты'
+    links_menu = ProductCategory.objects.all()
+    basket = get_basket(request.user)
+    product = get_object_or_404(Product, pk=pk)
+    same_products = get_same_products(product)
+
+    context = {
+        'title': title,
+        'links_menu': links_menu,
+        'basket': basket,
+        'product': product,
+        'same_products': same_products,
+    }
+    return render(request, 'mainapp/product.html', context)
