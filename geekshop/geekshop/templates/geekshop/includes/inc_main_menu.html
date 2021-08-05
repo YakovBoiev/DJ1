@@ -9,7 +9,7 @@
         <li>
             <a href="{% url 'auth:edit' %}"> {{ user.first_name|default:'Пользователь'}}</a>
            {% if basket %}
-                 <a href="{% url 'basket:view' %}"> ({{ basket|length }}) </a>
+                 <a href="{% url 'basket:view' %}"> {{ basket.0.total_cost|floatformat:0 }} РУБ ({{ basket.0.total_quantity }} шт) </a>
             {% endif %}
         </li>
         {% endif %}

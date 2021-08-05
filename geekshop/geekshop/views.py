@@ -1,19 +1,21 @@
 from django.shortcuts import render
+from mainapp.views import get_basket
 
 
 def index(request):
-    title = 'магазин'
+    title = 'Mагазин'
     context = {
         'title': title,
-        'slogan': 'супер предложение',
+        'basket': get_basket(request.user),
         }
 
     return render(request, 'geekshop/index.html', context)
 
 def contacts(request):
-    title = 'kонтакты'
+    title = 'Контакты'
     context = {
-        'title': title
+        'title': title,
+        'basket': get_basket(request.user),
     }
 
     return render(request, 'geekshop/contact.html', context)
