@@ -34,7 +34,7 @@
                             <th>Количество</th>
                             <th>Подробнее</th>
                             <th>Редактировать</th>
-                            <th>Удалить</th>
+                            <th>Удалить/Восстановить</th>
                         </tr>
                         </tfoot>
                         <tbody>
@@ -47,22 +47,24 @@
                                 <td>{{ product.quanaty  }}</td>
                                 <td class="text-center">
                                     <button>
-                                        <a href={% url 'admin_staff:product_read' product.pk %}>
+                                        <a href="{% url 'admin_staff:product_read' product.pk %}">
                                             Подробнее
                                         </a>
                                     </button>
                                 </td>
                                 <td class="text-center">
                                     <button>
-                                        <a href={% url 'admin_staff:product_update' product.pk %}>
+                                        <a href="{% url 'admin_staff:product_update' product.pk %}">
                                             Радактировать
                                         </a>
                                     </button>
                                 </td>
                                 <td class="text-center">
                                     <button>
-                                        <a href={% url 'admin_staff:product_delete' product.pk %}>
-                                            удалить
+                                         <a href="{% url 'adminapp:product_delete' product.pk %}">
+                                             {%if product.is_active %}Удалить
+                                            {% else %}Восстановить
+                                            {% endif %}
                                         </a>
                                     </button>
                                 </td>

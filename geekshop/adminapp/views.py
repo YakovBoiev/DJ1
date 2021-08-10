@@ -196,10 +196,14 @@ def product_update(request, pk):
 
 
 def product_delete(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    category = get_object_or_404(ProductCategory, pk=product.category.pk)
-    product.delete()
-    return HttpResponseRedirect(reverse('adminapp:products', args=[category.pk]))
+    if request.method == 'GET':
+        product = get_object_or_404(Product, pk=pk)
+        if product.is_active == True:
+            product.is_active = False
+        else:
+            product.is_active = True
+        product.save()
+        return HttpResponseRedirect(reverse('adminapp:products', args=[product.category.pk]))
 
 
 
