@@ -150,7 +150,7 @@ def product_create(request, pk):
         product_form = ProductEditForm(request.POST, request.FILES,)
         if product_form.is_valid():
             product_form.save()
-            HttpResponseRedirect(reverse('adminapp:products', args=[pk]))
+            return HttpResponseRedirect(reverse('adminapp:products', args=[pk]))
     else:
         product_form = ProductEditForm(initial={'category': category})
 
@@ -182,7 +182,7 @@ def product_update(request, pk):
         product_form = ProductEditForm(request.POST, request.FILES, instance=product)
         if product_form.is_valid():
             product_form.save()
-            HttpResponseRedirect(reverse('adminapp:product_update', args=[product.pk]))
+            return HttpResponseRedirect(reverse('adminapp:products', args=[product.category.pk]))
     else:
         product_form = ProductEditForm(instance=product)
 
@@ -196,10 +196,10 @@ def product_update(request, pk):
 
 
 def product_delete(request, pk):
-
     product = get_object_or_404(Product, pk=pk)
-    if request.method == 'GET':
-        HttpResponseRedirect(reverse('adminapp:products', args=[product.category.pk]))
+    category = get_object_or_404(ProductCategory, pk=product.category.pk)
+    product.delete()
+    return HttpResponseRedirect(reverse('adminapp:products', args=[category.pk]))
 
 
 
