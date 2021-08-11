@@ -35,7 +35,7 @@ def index(request, pk=None, page=1):
             category = get_object_or_404(ProductCategory, pk=pk)
             products = Product.objects.filter(category__pk=pk)
 
-        paginator = Paginator(products, 2)
+        paginator = Paginator(products, 3)
         try:
             products_paginator = paginator.page(page)
         except PageNotAnInteger:

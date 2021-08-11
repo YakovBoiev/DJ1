@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 from authapp.forms import ShopUserRegisterForm, ShopUserEditForm
 from authapp.models import ShopUser
@@ -8,38 +8,67 @@ from mainapp.models import ProductCategory, Product
 from django.contrib.auth.decorators import user_passes_test
 
 from .forms import ProductCategoryEditForm, ProductEditForm
+from django.views.generic import ListView, CreateView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def users(request):
-    title = 'админка/пользователи'
-    user_list = ShopUser.objects.all().order_by('-is_active', '-is_superuser', '-is_staff', 'username')
+# @user_passes_test(lambda u: u.is_superuser)
+# def users(request):
+#     title = 'админка/пользователи'
+#     user_list = ShopUser.objects.all().order_by('-is_active', '-is_superuser', '-is_staff', 'username')
+#
+#     context = {
+#         'title': title,
+#         'user_list': user_list,
+#     }
+#
+#     return render(request, 'adminapp/users.html', context)
 
-    context = {
-        'title': title,
-        'user_list': user_list,
-    }
+class UserListView(ListView, LoginRequiredMixin):
+    model = ShopUser
+    template_name = 'adminapp/users.html'
+    context_object_name = 'user_list'
 
-    return render(request, 'adminapp/users.html', context)
+    def get_queryset(self):
+        return ShopUser.objects.all().order_by('-is_active', '-is_superuser', '-is_staff', 'username')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(UserListView, self).get_context_data()
+        title = 'админка/пользователи'
+        context['title'] = title
+        return context
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def user_create(request):
-    title = 'пользователи/создание'
-    if request.method == 'POST':
-        user_form = ShopUserRegisterForm(request.POST, request.FILES)
-        if user_form.is_valid():
-            user_form.save()
-            return HttpResponseRedirect(reverse('admin_staff:users'))
-    else:
-        user_form = ShopUserRegisterForm()
+# @user_passes_test(lambda u: u.is_superuser)
+# def user_create(request):
+#     title = 'пользователи/создание'
+#     if request.method == 'POST':
+#         user_form = ShopUserRegisterForm(request.POST, request.FILES)
+#         if user_form.is_valid():
+#             user_form.save()
+#             return HttpResponseRedirect(reverse('admin_staff:users'))
+#     else:
+#         user_form = ShopUserRegisterForm()
+#
+#     context = {
+#         'title': title,
+#         'update_form': user_form,
+#     }
+#
+#     return render(request, 'adminapp/user_update.html', context)
 
-    context = {
-        'title': title,
-        'update_form': user_form,
-    }
+class UserCreateView(CreateView, LoginRequiredMixin):
+    model = ShopUser
+    template_name = 'adminapp/user_update.html'
+    form_class = ShopUserRegisterForm
+    success_url = reverse_lazy('admin_staff:users')
 
-    return render(request, 'adminapp/user_update.html', context)
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(UserCreateView, self).get_context_data()
+        title = 'пользователи/создание'
+        context['title'] = title
+        return context
+
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -162,19 +191,32 @@ def product_create(request, pk):
 
     return render(request, 'adminapp/product_update.html', context)
 
+# @user_passes_test(lambda u: u.is_superuser)
+# def product_read(request, pk):
+#      title = 'продукты/подробнее'
+#      product = get_object_or_404(Product, pk=pk)
+#
+#      context = {
+#          'title': title,
+#          'product': product,
+#      }
+#
+#      return render(request, 'adminapp/product_read.html', context)
 
-def product_read(request, pk):
-     title = 'продукты/подробнее'
-     product = get_object_or_404(Product, pk=pk)
 
-     context = {
-         'title': title,
-         'product': product,
-     }
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'adminapp/product_read.html'
 
-     return render(request, 'adminapp/product_read.html', context)
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductDetailView, self).get_context_data()
+        title = 'продукты/подробнее'
+        context['title'] = title
+        return context
 
 
+
+@user_passes_test(lambda u: u.is_superuser)
 def product_update(request, pk):
     title = 'продукты/редактироание'
     product = get_object_or_404(Product, pk=pk)
