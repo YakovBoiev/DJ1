@@ -2,24 +2,32 @@
 <div class="header clearfix">
     <a href="{% url 'index' %}" class="logo"></a>
     <ul class="menu">
-        <li><a href="{% url 'index' %}" class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">домой</a></li>
-        <li><a href="{% url 'products:products_all' %}" class="{% if request.resolver_match.url_name == 'products_all' %}active{% endif %}" >продукты</a></li>
-        <li><a href="{% url 'contacts' %}" class="{% if request.resolver_match.url_name == 'contacts' %}active{% endif %}">контакты</a></li>
+        <li><a href="{% url 'index' %}" class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">домой</a>
+        </li>
+        <li><a href="{% url 'products:products_all' %}"
+               class="{% if request.resolver_match.url_name == 'products_all' %}active{% endif %}">продукты</a></li>
+        <li><a href="{% url 'contacts' %}"
+               class="{% if request.resolver_match.url_name == 'contacts' %}active{% endif %}">контакты</a></li>
         {% if user.is_authenticated %}
         <li>
             <a href="{% url 'auth:edit' %}"> {{ user.first_name|default:'Пользователь'}}</a>
-           {% if basket %}
-                 <a href="{% url 'basket:view' %}"> {{ basket.0.total_cost|floatformat:0 }} РУБ ({{ basket.0.total_quantity }} шт) </a>
+            {% if basket %}
+            <a href="{% url 'basket:view' %}"> {{ basket.0.total_cost|floatformat:0 }} РУБ ({{ basket.0.total_quantity }} шт) </a>
             {% endif %}
         </li>
         {% endif %}
         <li>
-    {% if user.is_authenticated %}
-      <a href="{% url 'auth:logout' %}">выйти</a>
-    {% else %}
-      <a href="{% url 'auth:login' %}">войти</a>
-    {% endif %}
-</li>
+            {% if user.is_superuser %}
+            <a href="{% url 'admin_staff:users' %}">админка</a>
+            {% endif %}
+        </li>
+        <li>
+            {% if user.is_authenticated %}
+            <a href="{% url 'auth:logout' %}">выйти</a>
+            {% else %}
+            <a href="{% url 'auth:login' %}">войти</a>
+            {% endif %}
+        </li>
 
 
     </ul>
