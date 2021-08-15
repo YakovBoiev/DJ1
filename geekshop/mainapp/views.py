@@ -5,11 +5,6 @@ from .models import ProductCategory, Product
 from basketapp.models import Basket
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-def get_basket(user):
-    if user.is_authenticated:
-        return Basket.objects.filter(user=user)
-    else:
-        return []
 
 def get_hot_product():
     product = Product.objects.all()
@@ -25,7 +20,6 @@ def index(request, pk=None, page=1):
 
     title = 'Продукты'
     links_menu = ProductCategory.objects.all()
-    basket = get_basket(request.user)
 
     if pk is not None:
         if pk == 0:
@@ -43,13 +37,11 @@ def index(request, pk=None, page=1):
         except EmptyPage:
             products_paginator = paginator.page(paginator.num_pages)
 
-
         context = {
             'title': title,
             'links_menu': links_menu,
             'category': category,
             'products': products_paginator,
-            'basket': basket,
         }
 
         return render(request, 'mainapp/products_list.html', context)
@@ -62,7 +54,6 @@ def index(request, pk=None, page=1):
         'links_menu': links_menu,
         'same_products': same_products,
         'hot_product': hot_product,
-        'basket': basket,
     }
     return render(request, 'mainapp/products.html', context)
 
@@ -70,14 +61,12 @@ def index(request, pk=None, page=1):
 def product(request, pk):
     title = 'Продукты'
     links_menu = ProductCategory.objects.all()
-    basket = get_basket(request.user)
     product = get_object_or_404(Product, pk=pk)
     same_products = get_same_products(product)
 
     context = {
         'title': title,
         'links_menu': links_menu,
-        'basket': basket,
         'product': product,
         'same_products': same_products,
     }
