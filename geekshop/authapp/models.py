@@ -13,7 +13,8 @@ class ShopUser(AbstractUser):
     )
 
     age = models.PositiveIntegerField(
-        verbose_name='возраст'
+        verbose_name='возраст',
+        default=18
     )
 
     activation_key = models.CharField(
