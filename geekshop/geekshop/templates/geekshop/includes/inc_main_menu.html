@@ -11,10 +11,23 @@
         {% if user.is_authenticated %}
         <li>
             <a href="{% url 'auth:edit' %}"> {{ user.first_name|default:'Пользователь'}}</a>
+            <ul class="dropdown-menu">
+               <li>
+                   <a href="{% url 'auth:edit' %}">
+                       профиль
+                   </a>
+               </li>
+               <li>
+                   <a href="{#% url 'ordersapp:orders_list' %#}">
+                       заказы
+                   </a>
+               </li>
+           </ul>
             {% if basket %}
             <a href="{% url 'basket:view' %}"> {{ basket.0.total_cost|floatformat:0 }} РУБ ({{ basket.0.total_quantity }} шт) </a>
             {% endif %}
         </li>
+
         {% endif %}
         <li>
             {% if user.is_superuser %}
