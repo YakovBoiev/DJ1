@@ -68,7 +68,7 @@ class ShopUserProfile(models.Model):
     @receiver(post_save, sender=ShopUser)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
-            ShopUserprofile.objects.create(user=instance)
+            ShopUserProfile.objects.create(user=instance)
 
     @receiver(post_save, sender=ShopUser)
     def save_user_profile(sender, instance, **kwargs):
